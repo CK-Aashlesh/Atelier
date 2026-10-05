@@ -252,13 +252,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.02);
+  background-color: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--accent-orange);
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .getInTouchBtn svg {
@@ -268,7 +268,7 @@
 }
 
 .getInTouchBtn:hover {
-  background: rgba(242, 85, 34, 0.1);
+  background-color: rgba(242, 85, 34, 0.1);
   border-color: var(--accent-orange);
   color: #ffffff;
 }

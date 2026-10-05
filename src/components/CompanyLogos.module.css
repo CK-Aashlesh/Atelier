@@ -130,25 +130,18 @@
   opacity: 1;
 }
 
-/* SVG sizes for tech companies */
-.openaiSvg {
-  width: 110px;
-  height: 40px;
+.techIcon {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(100%) brightness(1.2);
+  opacity: 0.5;
+  transition: all 0.3s ease;
 }
 
-.amazonSvg {
-  width: 100px;
-  height: 40px;
-}
-
-.walmartSvg {
-  width: 120px;
-  height: 40px;
-}
-
-.tcsSvg {
-  width: 140px;
-  height: 40px;
+.logoWrapper:hover .techIcon {
+  filter: grayscale(0%) brightness(1.2);
+  opacity: 1;
 }
 
 @keyframes marqueeScroll {
@@ -172,21 +165,8 @@
     gap: 3.5rem;
     animation-duration: 20s;
   }
-  .openaiSvg {
-    width: 90px;
-    height: 32px;
-  }
-  .amazonSvg {
-    width: 80px;
-    height: 32px;
-  }
-  .walmartSvg {
-    width: 95px;
-    height: 32px;
-  }
-  .tcsSvg {
-    width: 110px;
-    height: 32px;
+  .techIcon {
+    height: 22px;
   }
   .brandLockup {
     height: 32px;
