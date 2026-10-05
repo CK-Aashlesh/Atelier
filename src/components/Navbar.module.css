@@ -24,7 +24,7 @@
 .scrolled {
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(16px) saturate(120%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: transparent;
   padding: 1rem 4rem;
 }
 
@@ -312,5 +312,5 @@
 .lightTheme.scrolled {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px) saturate(120%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: transparent;
 }
