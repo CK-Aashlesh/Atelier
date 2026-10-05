@@ -593,19 +593,10 @@ export default function AdminConsole() {
         setFormData(prev => ({ ...prev, image: data.file.url }));
         alert(`Course cover "${file.name}" uploaded successfully!`);
       } else {
-        // Fallback to direct client-side Data URL
-        const reader = new FileReader();
-        reader.onload = (re) => {
-          setFormData(prev => ({ ...prev, image: re.target.result }));
-        };
-        reader.readAsDataURL(file);
+        alert('Upload failed: ' + (data.error || 'Unknown error occurred.'));
       }
     } catch (err) {
-      const reader = new FileReader();
-      reader.onload = (re) => {
-        setFormData(prev => ({ ...prev, image: re.target.result }));
-      };
-      reader.readAsDataURL(file);
+      alert('Upload failed: ' + err.message);
     } finally {
       setCoverUploading(false);
       e.target.value = '';
@@ -646,18 +637,10 @@ export default function AdminConsole() {
         setFormData(prev => ({ ...prev, avatar: data.file.url }));
         alert(`Mentor photo "${file.name}" uploaded successfully!`);
       } else {
-        const reader = new FileReader();
-        reader.onload = (re) => {
-          setFormData(prev => ({ ...prev, avatar: re.target.result }));
-        };
-        reader.readAsDataURL(file);
+        alert('Upload failed: ' + (data.error || 'Unknown error occurred.'));
       }
     } catch (err) {
-      const reader = new FileReader();
-      reader.onload = (re) => {
-        setFormData(prev => ({ ...prev, avatar: re.target.result }));
-      };
-      reader.readAsDataURL(file);
+      alert('Upload failed: ' + err.message);
     } finally {
       setAvatarUploading(false);
       e.target.value = '';
