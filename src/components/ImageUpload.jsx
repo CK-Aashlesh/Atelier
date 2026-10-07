@@ -1,39 +1,75 @@
 "use client";
-import { IKContext, IKUpload } from "@imagekit/next";
+import { useState, useRef } from "react";
 
 export default function ImageUpload({ onSuccess, onError, folder, fileName }) {
-  const authenticator = async () => {
-    try {
-      const response = await fetch("/api/imagekit/auth");
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      // 1. Get authentication parameters from our Next.js API
+      const authRes = await fetch("/api/imagekit/auth");
+      if (!authRes.ok) {
+        throw new Error("Failed to authenticate with ImageKit");
+      }
+      const { signature, expire, token } = await authRes.json();
+
+      // 2. Prepare FormData for ImageKit
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY);
+      formData.append("signature", signature);
+      formData.append("expire", expire);
+      formData.append("token", token);
+      formData.append("fileName", fileName || file.name);
+      if (folder) formData.append("folder", folder);
+      formData.append("useUniqueFileName", "true");
+
+      // 3. Upload to ImageKit
+      const uploadRes = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await uploadRes.json();
+
+      if (!uploadRes.ok) {
+        throw new Error(data.message || "Upload failed");
       }
 
-      const data = await response.json();
-      const { signature, expire, token } = data;
-      return { signature, expire, token };
-    } catch (error) {
-      throw new Error(`Authentication request failed: ${error.message}`);
+      // 4. Success callback
+      if (onSuccess) onSuccess(data);
+      
+    } catch (err) {
+      if (onError) onError(err);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
   return (
     <div className="imagekit-upload-wrapper">
-      <IKContext 
-        publicKey={process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY} 
-        urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT} 
-        authenticator={authenticator} 
-      >
-        <IKUpload
-          fileName={fileName || "upload-image.jpg"}
-          folder={folder || "/user-uploads"}
-          onError={onError}
-          onSuccess={onSuccess}
-          useUniqueFileName={true}
-        />
-      </IKContext>
+      <input 
+        type="file" 
+        accept="image/*"
+        onChange={handleUpload}
+        ref={fileInputRef}
+        disabled={isUploading}
+        style={{
+          padding: "10px",
+          border: "1px dashed #ccc",
+          borderRadius: "4px",
+          cursor: isUploading ? "not-allowed" : "pointer",
+          background: isUploading ? "#f5f5f5" : "transparent"
+        }}
+      />
+      {isUploading && <span style={{ marginLeft: "10px" }}>Uploading...</span>}
     </div>
   );
 }

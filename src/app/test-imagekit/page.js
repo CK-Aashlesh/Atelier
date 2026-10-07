@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import ImageUpload from "@/components/ImageUpload";
-import { IKImage } from "@imagekit/next";
+import { Image as IKImage } from "@imagekit/next";
 
 export default function TestImageKitPage() {
   const [uploadedImage, setUploadedImage] = useState(null);
