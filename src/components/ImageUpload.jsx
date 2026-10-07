@@ -15,7 +15,12 @@ export default function ImageUpload({ onSuccess, onError, folder, fileName }) {
       // 1. Get authentication parameters from our Next.js API
       const authRes = await fetch("/api/imagekit/auth");
       if (!authRes.ok) {
-        throw new Error("Failed to authenticate with ImageKit");
+        let errMessage = "Failed to authenticate with ImageKit";
+        try {
+          const errData = await authRes.json();
+          if (errData.error) errMessage = errData.error;
+        } catch(e) {}
+        throw new Error(errMessage);
       }
       const { signature, expire, token } = await authRes.json();
 

@@ -80,7 +80,7 @@ export default function TestImageKitPage() {
           <h3>❌ Upload Failed</h3>
           <p>Please check the error details below:</p>
           <pre style={{ overflowX: "auto", background: "#fff", padding: "10px", marginTop: "10px" }}>
-            {JSON.stringify(error, null, 2)}
+            {error instanceof Error ? error.message : JSON.stringify(error, null, 2)}
           </pre>
           <p style={{ marginTop: "15px" }}>
             <strong>Troubleshooting:</strong>
